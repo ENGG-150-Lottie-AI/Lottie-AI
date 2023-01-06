@@ -127,6 +127,9 @@ def showOCRData(img:cv2.Mat, ocr_psm:int=3) -> cv2.Mat:
 ############################################
 
 def main() -> None:
+    version = "0.3"
+    print(f"Version {version}\n")
+    
     # Set-up input image
     document_filename = "case1.jpg"
     preprocessed_filename = "img_preproc.png"
@@ -190,6 +193,14 @@ def main() -> None:
     
     blank_black_RGB = np.zeros((50, w, 3), dtype = np.uint8)
     blank_white_L = np.ones((10, w), dtype = np.uint8)*255
+    
+    img_header = np.zeros((50, w, 3), dtype = np.uint8)
+    h, w, _ = img_header.shape
+    cv2.putText(
+        img_header, f"VERSION {version}", 
+        (5, h//2 + 2), cv2.FONT_HERSHEY_SIMPLEX, 
+        0.5, (255, 255, 255), 2)
+    cropped_lines.append(img_header)
 
     print("########## LOG ##########")
     for u, l in zip(upper_line_bounds, lower_line_bounds):        
@@ -235,7 +246,7 @@ def main() -> None:
 
         cropped_lines.append(line_data)
         cropped_lines.append(blank_black_RGB)
-    
+
     cropped_lines_img = np.vstack(cropped_lines)
     cv2.imwrite(results_filename, cropped_lines_img)
     print("#########################")
