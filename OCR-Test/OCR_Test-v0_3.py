@@ -80,45 +80,28 @@ def thresholdImage(img:Image.Image) -> Image.Image:
         np.array(img), 255,
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv2.THRESH_BINARY,
-        21, 15)
-    
-    # img2 = cv2.bitwise_not(np.array(img))
-    # thresh_img_mat = cv2.threshold(img2, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_TOZERO)[1]
-    # thresh_img_mat = invertImage(Image.fromarray(thresh_img_mat))
-    # return thresh_img_mat
+        15, 11)
     
     return Image.fromarray(thresh_img_mat)
 
 def invertImage(img:Image.Image) -> Image.Image:
+    """ Inverts all colors in an image. Returns an Image type. """
     return Image.fromarray(cv2.bitwise_not(np.array(img)))
 
 def getImageHistogram(img:Image.Image) -> np.ndarray:
+    """ Generates a histogram from an image. Returns an ndarray type. """
     return cv2.reduce(np.array(img), 1, cv2.REDUCE_AVG).reshape(-1)
 
-def checkAccuracy(target:str, recognized:str) -> float:
-    target_alpha = [i.upper() for i in target if i.isalnum()]
-    recognized_alpha = [i.upper() for i in recognized if i.isalnum()]
-    
-    print("########## LOG ##########")
-    blank = ""
-    print(f"\tTarget Text (w/o whitespace): {blank.join(target_alpha)}\n\n\tRecognized Test (w/o whitespace): {blank.join(recognized_alpha)}")
-    print("#########################")
-    
-    match_count = 0
-    total_count = len(target_alpha)
-    
-    t = 0
-    r = 0
-    while (t < len(target_alpha) and r < len(recognized_alpha)):
-        if (target_alpha[t] == recognized_alpha[r]):
-            match_count += 1
-        t += 1
-            
-        r += 1        
-    
-    return round((match_count/total_count)*100, 3)
+def getImageContours(img:cv2.Mat) -> tuple:
+    """ Generate contours of an image. Returns a tuple type. """
+    threshold_img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)[1]
+    rectangular_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (18, 18))
+    dilation = cv2.dilate(threshold_img, rectangular_kernel, iterations = 1)
+    contours = cv2.findContours(dilation, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)[0]
+    return contours
 
 def showOCRData(img:cv2.Mat, ocr_psm:int=3) -> cv2.Mat:
+    """ Recognizes text from an image (matrix) and draws what has been read. Returns a Mat type. """
     results = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT, config=f"--psm {ocr_psm}")
     
     for i in range(len(results["text"])):
@@ -146,7 +129,6 @@ def showOCRData(img:cv2.Mat, ocr_psm:int=3) -> cv2.Mat:
 def main() -> None:
     # Set-up input image
     document_filename = "case1.jpg"
-    # document_filename = "eeeeeeeeeeeeeeeee.jpg"
     preprocessed_filename = "img_preproc.png"
     text_lines_filename = "img_textlines.png"
     results_filename = "img_result.png"
@@ -199,7 +181,10 @@ def main() -> None:
     # Use Tesseract OCR to read text per line
     preprocessed_img_mat = np.array(preprocessed_img)
     
-    ocr_psm = 3
+    ocr_psm_default = 7
+    ocr_psm_backup = 3
+    ocr_psm = ocr_psm_default
+    
     line_boundary_offset = 0
     cropped_lines = []
     
@@ -207,49 +192,49 @@ def main() -> None:
     blank_white_L = np.ones((10, w), dtype = np.uint8)*255
 
     print("########## LOG ##########")
-    for u, l in zip(upper_line_bounds, lower_line_bounds):
+    for u, l in zip(upper_line_bounds, lower_line_bounds):        
+        # Crop the portion of the image containing the line, then pad the top and bottom with white spaces
         cropped_line = preprocessed_img_mat[u-line_boundary_offset:l+line_boundary_offset,]
         cropped_line = np.concatenate((blank_white_L, cropped_line, blank_white_L), dtype=np.uint8)
         
-        #####
+        # Create contours to detect potential text
+        contours = getImageContours(cropped_line)[::-1]
         
-        thresh1 = cv2.threshold(cropped_line, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)[1]
-        rect_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (18, 18))
-        dilation = cv2.dilate(thresh1, rect_kernel, iterations = 1)
-        contours, hierarchy = cv2.findContours(dilation, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
-        
-        line_data2 = (cv2.cvtColor(cropped_line,cv2.COLOR_GRAY2RGB)).copy()
-        for cnt in contours:
-            x1, y1, w1, h1 = cv2.boundingRect(cnt)
+        line_data = (cv2.cvtColor(cropped_line,cv2.COLOR_GRAY2RGB)).copy()
+        for cont in contours:
+            x_cont, y_cont, w_cont, h_cont = cv2.boundingRect(cont)
 
             # Cropping the text block for giving input to OCR
-            cropped = cropped_line[y1:y1 + h1, x1:x1 + w1]
+            line_section = cropped_line[y_cont : y_cont + h_cont, x_cont : x_cont + w_cont]
             
-            # Apply OCR on the cropped image
-            line_text = pytesseract.image_to_string(cropped, config=f"--psm {ocr_psm}")
-            # line_data = showOCRData(cv2.cvtColor(cropped_line,cv2.COLOR_GRAY2RGB), ocr_psm)
+            # Recognize text, if text is long, use other PSM for the OCR
+            used_different_ocr_psm = False
+            while (True):
+                # Apply OCR on the cropped image
+                line_text = pytesseract.image_to_string(line_section, config=f"--psm {ocr_psm}")
+                if len(line_text.split(" ")) <= 3 or used_different_ocr_psm:
+                    ocr_psm = ocr_psm_default
+                    break
+    
+                used_different_ocr_psm = True
+                ocr_psm = ocr_psm_backup
+                continue
             
-            cv2.rectangle(line_data2, (x1, y1), (x1 + w1, y1 + h1), (0, 255, 0), 2)
+            # Draw a rectangle marking the section and the recognized text (marked "?" if not ASCII) from the section
+            cv2.rectangle(
+                line_data, 
+                (x_cont, y_cont), (x_cont + w_cont, y_cont + h_cont), 
+                (0, 255, 0), 2)
+            line_text = "".join([c if ord(c) < 128 else "?" for c in line_text]).strip()
+            cv2.putText(
+                line_data, line_text, 
+                (x_cont + 3, y_cont+10), cv2.FONT_HERSHEY_SIMPLEX, 
+                0.35, (200, 0, 0), 1)
             
-            text = "".join([c if ord(c) < 128 else "?" for c in line_text]).strip()
-            cv2.putText(line_data2, text, (x1+3, y1+10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (200, 0, 0), 1)
-            
-            print(line_text[:-1])
-        
-        line_data = showOCRData(cv2.cvtColor(cropped_line,cv2.COLOR_GRAY2RGB), ocr_psm)
-        line_data = line_data2
+            print(line_text)
+
         cropped_lines.append(line_data)
         cropped_lines.append(blank_black_RGB)
-        
-        #####
-        
-        # line_text = pytesseract.image_to_string(cropped_line, config=f"--psm {ocr_psm}")
-        # line_data = showOCRData(cv2.cvtColor(cropped_line,cv2.COLOR_GRAY2RGB), ocr_psm)
-        
-        # cropped_lines.append(line_data)
-        # cropped_lines.append(blank_black_RGB)
-        
-        # print(line_text[:-1])
     
     cropped_lines_img = np.vstack(cropped_lines)
     cv2.imwrite(results_filename, cropped_lines_img)
