@@ -1,0 +1,51 @@
+TCT No.: 087-2017002337
+Page No.: 2
+
+OWNER INFORMATION (Continued from page 1)
+Owner: LAWS OF THE PHILIPPINES
+
+TECHNICAL DESCRIPTION (Continued from page 1)
+PROV. OF AKLAN, ISLAND OF PANAY
+
+BOUNDARIES:
+    LINE                DIRECTION           ADJOINING LOT(S)
+    1-2-3-4-5-6-7-      NW, NE              LOT 1-A-1-D-2-H (ROAD),
+    8-9-10-11-12-                           (LRA) PSD-E2017002885
+    13
+    13-14               SE                  LOT 1-A-1-D-3-D, (LRA) PSD-
+                                            E2017002885
+    14-1                SW                  LOT 786, MALAY CADASTRE
+
+TIE POINT:  BLBM NO. 2, BO. OF BALABAG, MUNICIPALITY OF MALAY, 
+            PROVINCE OF AKLAN
+
+LINE                BEARING             DISTANCE
+TO CORNER 1         N. 32° 27° W        2228.24 M.
+1-2                 N. 31° 49° E        27.11 M.
+2-3                 S. 61° 49° E        52.52 M.
+3-4                 S. 68° 48° E        6.08 M.
+4-5                 S. 82° 46° E        6.08 M.
+5-6                 N. 83° 16° E        6.08 M.
+6-7                 N. 69° 18° E        6.08 M.
+7-8                 N. 55° 20° E        6.08 M.
+8-9                 N. 41° 22° E        6.08 M.
+9-10                N. 34° 23° E        45.18 M.
+10-11               N. 40° 28° E        7.50 M.
+11-12               N. 53° 00° E        7.50 M.
+12-13               N. 65° 32° E        7.50 M.
+13-14               S. 34° 22° W        115.00 M.
+14-1                N. 61° 51° W        80.87 M.
+
+AREA: TWO THOUSAND EIGHT HUNDRED EIGHTY FIVE SQUARE METERS (2885)
+        , MORE OR LESS
+DESCRIPTION OF CORNERS: ALL CORNERS ARE PS. CYL. CONC. MONS. 15X40
+CMS
+
+BEARINGS: TRUE
+DECLINAITON
+DATE OF ORIGINAL SURVEY: APRIL 3-16. 1923
+DATE OF SUBD/CONS SURVEY: APRIL 4, 2017
+GEODETIC ENGINEER: CARLOS P. DIZON
+NOTES:
+
+It is hereby certified that this is a true electronic copy of TCT 2017002337 on file in Registry of Deeds of Province of Aklan, which
