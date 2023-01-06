@@ -1,0 +1,134 @@
+Version 0.3
+
+########## LOG ##########
+	RAW
+
+	OBJECT FORMAT: JpegImageFile
+	MODE: RGB
+	COLOR SPACE: None
+	SIZE: 680x859
+#########################
+
+########## LOG ##########
+	NORMALIZED
+
+	OBJECT FORMAT: Image
+	MODE: RGB
+	COLOR SPACE: None
+	SIZE: 680x859
+#########################
+
+########## LOG ##########
+	RESCALED
+
+	OBJECT FORMAT: Image
+	MODE: RGB
+	COLOR SPACE: None
+	SIZE: 1024x1293
+#########################
+
+########## LOG ##########
+	GRAYSCALE
+
+	OBJECT FORMAT: Image
+	MODE: L
+	COLOR SPACE: None
+	SIZE: 1024x1293
+#########################
+
+########## LOG ##########
+	THRESHOLD
+
+	OBJECT FORMAT: Image
+	MODE: L
+	COLOR SPACE: None
+	SIZE: 1024x1293
+#########################
+
+########## LOG ##########
+LOT DATA COMPUTATION
+
+Lot No.:
+1342
+Date Surveyed:
+Dec 12,
+1996
+Swy
+FELICIANO MEJIA
+Danke
+Owner:
+Geodetic Enaineer
+-
+Location:
+
+.
+Surv. Sym. & Wo.
+Tag:
+R13
+STATION AZIMUTH COORDINATES LINE BEARING
+
+CORNER DISTANCE NORTHING EASTING DESC DISTANCE
+Reference : BLLM 5
+1,489,034. 800
+474,835,760
+TP-1
+S$ 81-2 W
+1252.42
+1
+1,488,839. 680
+473,598. 630
+1-2
+N0-27 E
+98.27
+2
+1,488, 937.950
+473,599.30
+2-3
+? 85-13 E
+39.85
+3
+1,488, 937.410
+473,635.240
+3-4
+5 10-13 W
+17.65
+4
+1,488, 920.040
+473, 636.110
+4-5
+$ 51-21 E
+29.21
+s
+1,488, 901.800
+473,658.920
+5-6
+S$ 71-16 E
+69.57
+6
+1,488,875. 450
+473,724,800
+6-7
+$ 77-23 E
+55.4
+7
+1,488,867.350
+473,778.860
+7-8
+S$ 18-3 W
+26.35
+8
+1,488,842. 300
+473,770.700
+8-35
+5 8-15 W
+37.26
+473,765,350
+9
+1,488,805. 430
+g-1
+N 78-23 W
+170.2
+Computed Area (Sq.m.} 313,284.18
+113,284.00
+irea (Sq.m.)}
+#########################
