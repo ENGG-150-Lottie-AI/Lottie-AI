@@ -22,5 +22,10 @@ pip install pytesseract
 pip install Pillow
 ```
 
+### [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter)
+```
+pip3 install customtkinter
+```
+
 ### [Tesseract OCR](https://github.com/tesseract-ocr/tessdoc)
 Please refer to the [documentation](https://tesseract-ocr.github.io/tessdoc/Installation.html) for installation procedures.
