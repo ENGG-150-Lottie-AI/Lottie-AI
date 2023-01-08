@@ -185,6 +185,7 @@ def main() -> None:
     lines_stack.append(stack_header)
 
     recognized_text = ""
+    word_delimiter = "<!word_end!>"
     print("########## LOG ##########")
     for u, l in zip(upper_line_bounds, lower_line_bounds):        
         # Crop the portion of the image containing the line, then pad the top and bottom with white spaces
@@ -213,7 +214,7 @@ def main() -> None:
                 (x_cont + 3, y_cont+10), cv2.FONT_HERSHEY_SIMPLEX, 
                 0.35, (200, 0, 0), 1)
             
-            recognized_text += line_text + " "
+            recognized_text += line_text.upper() + word_delimiter
             print(line_text)
 
         recognized_text += "\n"
@@ -224,29 +225,30 @@ def main() -> None:
     cv2.imwrite(results_filename, cropped_lines_img)
     
     with open("recognized_text.txt", "w") as out_file:
-        out_file.write(recognized_text)
+        out_file.write(recognized_text.replace(word_delimiter, " "))
     print("#########################")
     
     with open(csv_filename, "w") as csv_file:
-        recognized_text = [i.split() for i in recognized_text.split("\n")]
+        recognized_text = [i.split(word_delimiter) for i in recognized_text.split("\n")]
         td_keywords = {"LINE":-1, "BEARING":-1, "DISTANCE":-1}
         num_of_cols = -1
         
         csv_file.write("LINE,BEARING,DISTANCE,FORMULA\n")
-        for line in recognized_text:            
+        for line in recognized_text:
             if all(np.array([*td_keywords.values()]) != -1) and len(line) == num_of_cols:
                 _bearing_raw = fixNumTypos(line[td_keywords['BEARING']])
-                _bearing_split = [re.search('^[NS\$]', _bearing_raw), re.search('\d+-', _bearing_raw), re.search('-\d+', _bearing_raw), re.search('[WE]$', _bearing_raw)]
+                _bearing_split = [re.search('^[NS\$]', _bearing_raw), re.search('\d+[^-]*-', _bearing_raw), re.search('-[^-]*\d+', _bearing_raw), re.search('[WE]$', _bearing_raw)]
                 if not all(_bearing_split):
                     break
                     
                 ns_f, deg_f, min_f, ew_f = [*map(lambda m: m.group(), _bearing_split)]
                 ns_f = "S" if "$" in ns_f else ns_f
-                deg_f = deg_f[:-1]
-                min_f = min_f[1:]
+                deg_f = re.search('\d+', deg_f).group()
+                min_f = re.search('\d+', min_f).group()
                 
                 _line = fixNumTypos(line[td_keywords['LINE']])
                 _distance = fixNumTypos(line[td_keywords['DISTANCE']])
+                _distance = re.search('^([0-9]|\.|,)+', _distance).group()
                 _bearing = f"{ns_f}{deg_f}-{min_f}{ew_f}"
                 
                 _formula = f"@{_distance}<{ns_f}{deg_f}d{min_f}'{ew_f}"
