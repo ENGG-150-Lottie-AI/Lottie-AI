@@ -1,4 +1,4 @@
-Version 0.3
+Version 0.3.1
 
 ########## LOG ##########
 	RAW
@@ -29,15 +29,6 @@ Version 0.3
 
 ########## LOG ##########
 	GRAYSCALE
-
-	OBJECT FORMAT: Image
-	MODE: L
-	COLOR SPACE: None
-	SIZE: 1656x2339
-#########################
-
-########## LOG ##########
-	THRESHOLD
 
 	OBJECT FORMAT: Image
 	MODE: L
@@ -79,7 +70,7 @@ N 31-49 E
 27.11
 2-3
 S 61-49 E
-?2.52
+52.52
 3-4
 S 68-48 E
 36.08
