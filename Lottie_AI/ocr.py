@@ -76,7 +76,6 @@ def runOCR(document_path:str) -> None:
     # Set-up input image
     document_prefix = Path(document_path).stem
     csv_filename = document_prefix + ".csv"
-    recognized_filename = document_prefix + ".txt"
     
     raw_img = Image.open(document_path)
     preprocessed_img = raw_img
@@ -134,10 +133,7 @@ def runOCR(document_path:str) -> None:
 
         recognized_text += "\n"
 
-    # Finally, save all recognized text to a text file then process all recognized text; store output in a csv
-    with open(recognized_filename, "w") as out_file:
-        out_file.write(recognized_text.replace(word_delimiter, " "))
-
+    # Finally, process all recognized text; store output in a csv
     with open(csv_filename, "w") as csv_file:
         csv_file.write("LINE,N/S,DEG,MIN,E/W,DISTANCE,FORMULA\n")
         
