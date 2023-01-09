@@ -54,7 +54,7 @@ def getImageHistogram(img:Image.Image) -> np.ndarray:
 def getImageContours(img:cv2.Mat) -> tuple:
     """ Generate contours of an image. Returns a tuple type. """
     threshold_img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)[1]
-    rectangular_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (18, 18))
+    rectangular_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, ksize=(18, 2 * img.shape[1]))
     dilation = cv2.dilate(threshold_img, rectangular_kernel, iterations = 1)
     contours = cv2.findContours(dilation, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)[0]
     return contours
