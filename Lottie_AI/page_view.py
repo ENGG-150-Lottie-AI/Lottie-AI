@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter   
 from tkinter import filedialog as fd
+from ocr import runOCR
+
 #from PIL import Image, ImageTk
 
 # Choose Files gets the directory of each file selected, returns a tuple
@@ -61,7 +63,8 @@ class UploadsPage(Page):
     
     def extract(self):
         #extract engine place here
-        print("hi")   
+        for i in range(len(self.filenames)):
+            runOCR(self.filenames[i])
 
     def choose_files(self):
         #gets directories for files
@@ -80,6 +83,8 @@ class UploadsPage(Page):
 
         for i in range(len(self.filenames)):
             print(self.filenames[i])
+
+        return self.filenames
  
 
 class ScanPage(Page):
