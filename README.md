@@ -1,5 +1,10 @@
-# Lottie-AI
+# Lottie AI
 ENGG 150 Venture Project
+
+## Running Lottie AI
+```
+python Lottie-AI.py
+```
 
 ## Dependencies
 ### [NumPy](https://numpy.org/doc/stable/)
